@@ -1,0 +1,215 @@
+﻿<mah:MetroWindow x:Class="FS400.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:FS400"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:converters="clr-namespace:FS400.Converters"
+                 mc:Ignorable="d"
+                 DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
+                 Closing="MainWindow_OnClosing"
+                 WindowStartupLocation="CenterScreen"
+                 Title="FS400" Height="450" Width="800">
+    <Grid>
+        <Grid.Resources>
+            <Style BasedOn="{StaticResource MahApps.Styles.TextBlock}" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+            <TabItem Header="Connexions">
+                <Grid>
+                    <Grid.Resources>
+                        <converters:BoolChoiceToVisibilityConverter VisibilityIfFalse="Collapsed" VisibilityIfTrue="Visible" x:Key="TrueToVisibilityConverter" />
+                        <converters:BoolChoiceToVisibilityConverter VisibilityIfFalse="Visible" VisibilityIfTrue="Collapsed" x:Key="FalseToVisibilityConverter" />
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border BorderThickness="0 0 0 1" 
+                            Margin="5 2"
+                            BorderBrush="{StaticResource MahApps.Brushes.Accent}">
+                        <TextBlock Text="ARDUINO" Foreground="{StaticResource MahApps.Brushes.Highlight}" 
+                                   FontWeight="Bold"
+                                   Margin="5 0" />
+                    </Border>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Margin="10 5" Text="Port" Grid.Row="0" Grid.Column="0" />
+                        <ComboBox Grid.Column="1" Grid.Row="0" 
+                                  Margin="0 2"
+                                  ItemsSource="{Binding AvailablePorts}" 
+                                  SelectedItem="{Binding ArduinoHelper.PortName}" />
+                        <Button Grid.Row="0" Grid.Column="2"
+                                Margin="2"
+                                Content="&#xE117;" 
+                                Click="ReloadPortsListButton_OnClick"
+                                FontFamily="Segoe UI Symbol" 
+                                ToolTip="Recharger la liste des ports" />
+
+                        <TextBlock Margin="10 5" Text="Baudrate" Grid.Row="1" Grid.Column="0" />
+                        <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="1" Text="{Binding ArduinoHelper.BaudRate}" />
+
+                        <TextBlock Margin="10 5" Text="Read Timeout" Grid.Row="2" Grid.Column="0" />
+                        <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="2" Text="{Binding ArduinoHelper.ReadTimeout}" />
+
+                        <TextBlock Margin="10 5" Text="Write Timeout" Grid.Row="3" Grid.Column="0" />
+                        <TextBox Grid.Column="1" Width="100" Grid.Row="3" Margin="0 2" Text="{Binding ArduinoHelper.WriteTimeout}" />
+
+                        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Se connecter" 
+                                Click="ConnectArduinoButton_OnClick"
+                                Margin="10 0 0 0"
+                                Visibility="{Binding ArduinoHelper.IsConnected, Converter={StaticResource FalseToVisibilityConverter}}" />
+                        <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Se déconnecter" 
+                                Click="DisconnectArduinoButton_OnClick"
+                                Margin="10 0 0 0"
+                                Visibility="{Binding ArduinoHelper.IsConnected, Converter={StaticResource TrueToVisibilityConverter}}" />
+                    </Grid>
+
+                    <Border BorderThickness="0 0 0 1" 
+                            Grid.Row="2"
+                            Margin="5 2"
+                            BorderBrush="{StaticResource MahApps.Brushes.Accent}">
+                        <TextBlock Text="FLIGHT SIMULATOR" FontWeight="Bold" 
+                                   Foreground="{StaticResource MahApps.Brushes.Highlight}" 
+                                   Margin="5 0" />
+                    </Border>
+
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Button Content="Se connecter" Click="ConnectFSButton_OnClick" Grid.Row="0"
+                                Visibility="{Binding FlightSimulatorHelper.IsConnected, Converter={StaticResource FalseToVisibilityConverter}}"  />
+                        <Button Content="Se déconnecter" Click="DisconnectFSButton_OnClick" Grid.Row="0"
+                                Visibility="{Binding FlightSimulatorHelper.IsConnected, Converter={StaticResource TrueToVisibilityConverter}}" />
+                        <Button Grid.Row="1" Content="Test" Click="TestButton_OnClick" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Valeurs">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Starter State" Grid.Row="0" Grid.Column="1" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding DR400Variables.IsStarterOn}" />
+                    <TextBlock Text="Electrical Master Battery" Grid.Row="1" Grid.Column="1" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding DR400Variables.IsElectricalMasterBatteryOn}" />
+                    <TextBlock Text="Alternator" Grid.Row="2" Grid.Column="1" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding DR400Variables.IsAlternatorOn}" />
+                    <TextBlock Text="Light Taxi" Grid.Row="3" Grid.Column="1" />
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DR400Variables.IsLightTaxiOn}" />
+                    <TextBlock Text="Light Landing" Grid.Row="4" Grid.Column="1" />
+                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding DR400Variables.IsLandingLightOn}" />
+                    <TextBlock Text="Strobe Light" Grid.Row="5" Grid.Column="1" />
+                    <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding DR400Variables.IsStrobeLightOn}" />
+                    <TextBlock Text="Nav Light" Grid.Row="6" Grid.Column="1" />
+                    <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding DR400Variables.IsNavLightOn}" />
+                    <TextBlock Text="Pitot Heat" Grid.Row="7" Grid.Column="1" />
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding DR400Variables.IsPitotHeatOn}" />
+                    <TextBlock Text="Fuel Pump" Grid.Row="8" Grid.Column="1" />
+                    <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding DR400Variables.IsFuelPumpOn}" />
+                    <TextBlock Text="Anti Ice" Grid.Row="9" Grid.Column="1" />
+                    <TextBlock Grid.Row="9" Grid.Column="2" Text="{Binding DR400Variables.IsAntiIceOn}" />
+                    <TextBlock Text="Fuel Tank" Grid.Row="10" Grid.Column="1" />
+                    <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding DR400Variables.FuelTankSelector}" />
+                    <TextBlock Text="Mixture" Grid.Row="11" Grid.Column="1" />
+                    <TextBlock Grid.Row="11" Grid.Column="2" Text="{Binding DR400Variables.MixtureLevel}" />
+                    <TextBlock Text="Right Magneto" Grid.Row="12" Grid.Column="1" />
+                    <TextBlock Grid.Row="12" Grid.Column="2" Text="{Binding DR400Variables.IsRightMagnetoOn}" />
+                    <TextBlock Text="Left Magneto" Grid.Row="13" Grid.Column="1" />
+                    <TextBlock Grid.Row="13" Grid.Column="2" Text="{Binding DR400Variables.IsLeftMagnetoOn}" />
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Console">
+                <RichTextBox Name="DebugBox" 
+                             AcceptsReturn="True" 
+                             AcceptsTab="True" 
+                             VerticalScrollBarVisibility="Auto" 
+                             IsReadOnly="True"
+                             IsReadOnlyCaretVisible="False"
+                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </TabItem>
+
+        </TabControl>
+
+
+        <Grid Grid.Row="1" Background="{StaticResource MahApps.Brushes.Accent}">
+            <Grid.Resources>
+                <converters:BoolToConnectedConverter x:Key="BoolToConnectedConverter" />
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Statuts : " Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
+
+            <TextBlock Text="{Binding ArduinoHelper.EventsSent, StringFormat='Arduino ({0})'}" Grid.Column="1" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
+            <Border Grid.Column="2" Margin="5 1 1 1" Background="{Binding ArduinoHelper.IsConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
+
+            <Border Grid.Column="3" Background="{StaticResource MahApps.Brushes.IdealForeground}" BorderThickness="1 0 0 0" Width="2" Margin="5 1" />
+
+            <TextBlock Text="Flight Simulator" Grid.Column="4" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
+            <Border Grid.Column="5" Margin="5 1 1 1" Background="{Binding FlightSimulatorHelper.IsConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
+
+        </Grid>
+    </Grid>
+</mah:MetroWindow>
