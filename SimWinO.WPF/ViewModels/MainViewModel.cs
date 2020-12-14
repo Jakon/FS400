@@ -20,6 +20,8 @@ namespace SimWinO.WPF.ViewModels
             ReloadPortsListCommand = new Command(LoadAvailablePorts);
             ConnectFSCommand = new Command(ConnectFlightSimulator);
             DisconnectFSCommand = new Command(DisconnectFlightSimulator);
+
+            SimWinOCore.Config = "DR400";
         }
 
         public void ConnectArduino()

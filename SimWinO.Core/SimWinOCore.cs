@@ -21,8 +21,8 @@ namespace SimWinO.Core
 
         private IArduinoParser ArduinoParser { get; set; }
 
-        private FlightSimulatorHelper FSHelper { get; set; }
-        private ArduinoHelper ArduinoHelper { get; set; }
+        private FlightSimulatorHelper FSHelper { get; set; } = new FlightSimulatorHelper();
+        private ArduinoHelper ArduinoHelper { get; set; } = new ArduinoHelper();
 
         #region Flight Simulator internal logic
 
@@ -60,9 +60,9 @@ namespace SimWinO.Core
 
         public bool IsFlightSimulatorConnected => FSHelper.IsConnected;
 
-        public Dictionary<string, Tuple<Type, IArduinoParser>> AvailableConfigs { get; } = new Dictionary<string, Tuple<Type, IArduinoParser>>
+        public Dictionary<string, (Type, IArduinoParser)> AvailableConfigs { get; } = new Dictionary<string, (Type, IArduinoParser)>
         {
-            { "DR400", new Tuple<Type, IArduinoParser>(typeof(DR400Struct), new DR400Parser()) },
+            { "DR400", (typeof(DR400Struct), new DR400Parser()) },
         };
 
         public string Config
@@ -85,7 +85,7 @@ namespace SimWinO.Core
 
             FSHelper = new FlightSimulatorHelper();
             var connect = typeof(FlightSimulatorHelper).GetMethod(nameof(FSHelper.Connect));
-            var method = connect?.MakeGenericMethod(CurrentState.GetType());
+            var method = connect?.MakeGenericMethod(CurrentConfigType);
             method?.Invoke(FSHelper, null);
 
             FSHelper.OnReceiveSimObjectData += OnReceiveFromFlightSimulator;

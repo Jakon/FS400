@@ -21,9 +21,15 @@ namespace SimWinO.WPF
 
         protected override void OnSourceInitialized(EventArgs e)
         {
-            GetHWinSource().AddHook(ViewModel.SimWinOCore.WndProc);
+            GetHWinSource().AddHook(WndProc);
             ViewModel.SimWinOCore.OnSourceInitialized(GetHWinSource().Handle);
             base.OnSourceInitialized(e);
+        }
+
+        // Réception de message inter-processus
+        private IntPtr WndProc(IntPtr hWnd, int iMsg, IntPtr hWParam, IntPtr hLParam, ref bool bHandled)
+        {
+            return ViewModel.SimWinOCore.WndProc(hWnd, iMsg, hWParam, hLParam, ref bHandled);
         }
 
         #endregion
