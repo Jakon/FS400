@@ -127,7 +127,7 @@
 
             <TextBlock Text="Statuts : " Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
 
-            <TextBlock Text="{Binding ArduinoHelper.EventsSent, StringFormat='Arduino ({0})'}" Grid.Column="1" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
+            <TextBlock Text="Arduino" Grid.Column="1" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
             <Border Grid.Column="2" Margin="5 1 1 1" Background="{Binding SimWinOCore.IsArduinoConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
 
             <Border Grid.Column="3" Background="{StaticResource MahApps.Brushes.IdealForeground}" BorderThickness="1 0 0 0" Width="2" Margin="5 1" />

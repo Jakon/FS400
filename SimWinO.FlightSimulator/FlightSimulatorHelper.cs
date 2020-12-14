@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.FlightSimulator.SimConnect;
+using SimWinO.FlightSimulator.Commands;
 using SimWinO.FlightSimulator.Enums;
 using SimWinO.FlightSimulator.Utils;
 
@@ -20,6 +21,11 @@ namespace SimWinO.FlightSimulator
         public SimConnect SimConnect { get; set; }
 
         public bool IsConnected { get; set; }
+
+        public EngineCommands EngineCommands { get; set; }
+        public MiscSystemsCommands MiscSystemsCommands { get; set; }
+        public LightsCommands LightsCommands { get; set; }
+        public FuelSystemsCommands FuelSystemsCommands { get; set; }
 
         private void StartTimer()
         {
@@ -157,6 +163,11 @@ namespace SimWinO.FlightSimulator
         /// </summary>
         public void AssignCommandsAndValues<T>()
         {
+            EngineCommands = new EngineCommands(SimConnect);
+            MiscSystemsCommands = new MiscSystemsCommands(SimConnect);
+            LightsCommands = new LightsCommands(SimConnect);
+            FuelSystemsCommands = new FuelSystemsCommands(SimConnect);
+
             // On assigne les différentes commandes qu'on veut envoyer au simulateur
             foreach (SimEvents simEvent in Enum.GetValues(typeof(SimEvents)))
             {
@@ -170,46 +181,6 @@ namespace SimWinO.FlightSimulator
             }
 
             SimConnect.RegisterDataDefineStruct<T>(DEFINITIONS.Dummy);
-        }
-
-
-        private void SetMagneto1(uint value)
-        {
-            // MAGNETO1_SET 
-            if (IsConnected)
-                SimConnect.TransmitClientEvent(0, SimEvents.MAGNETO1_SET, value, GROUP.GROUP1, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        }
-
-        public void ChangeBatteryState()
-        {
-            if (IsConnected)
-                SimConnect.TransmitClientEvent(0, SimEvents.TOGGLE_MASTER_BATTERY, 0, GROUP.GROUP1, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        }
-
-        public void ChangeAlternatorState()
-        {
-            if (IsConnected)
-                SimConnect.TransmitClientEvent(0, SimEvents.TOGGLE_MASTER_ALTERNATOR, 0, GROUP.GROUP1, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-        }
-
-        public void SetMagnetoOff()
-        {
-            SetMagneto1(0);
-        }
-
-        public void SetMagnetoRight()
-        {
-            SetMagneto1(1);
-        }
-
-        public void SetMagnetoLeft()
-        {
-            SetMagneto1(2);
-        }
-
-        public void SetMagnetoBoth()
-        {
-            SetMagneto1(3);
         }
     }
 }

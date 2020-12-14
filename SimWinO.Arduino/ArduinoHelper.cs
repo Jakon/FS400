@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Threading;
 
 namespace SimWinO.Arduino
 {
@@ -13,13 +14,13 @@ namespace SimWinO.Arduino
 
         public SerialPort Port { get; set; }
 
-        public int BaudRate { get; set; }
+        public int BaudRate { get; set; } = 115200;
 
         public string PortName { get; set; }
 
-        public int ReadTimeout { get; set; }
+        public int ReadTimeout { get; set; } = 250;
 
-        public int WriteTimeout { get; set; }
+        public int WriteTimeout { get; set; } = 250;
 
         public void Connect()
         {
@@ -27,13 +28,13 @@ namespace SimWinO.Arduino
             {
                 InitPort();
                 Port.Open();
-                IsConnected = true;
+                IsConnected = Port.IsOpen;
                 Port.WriteLine("S911"); // On allume la Led de l'Arduino pour lui indiquer qu'on est là ! 
-                //Port.WriteLine("V201"); // On active toutes les entrées dispo sur l'arduino
-                Port.WriteLine("S102"); // On active toutes les entrées dispo sur l'arduino
+                Port.WriteLine("S201"); // On active toutes les entrées dispo sur l'arduino
             }
             catch (Exception e)
             {
+                IsConnected = false;
                 Debug.Write(e.Message);
             }
         }

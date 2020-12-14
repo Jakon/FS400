@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using SimWinO.Arduino;
+using SimWinO.Core.Annotations;
 using SimWinO.Core.Configs;
 using SimWinO.FlightSimulator;
 
 namespace SimWinO.Core
 {
-    public class SimWinOCore : INotifyCollectionChanged
+    public class SimWinOCore : INotifyCollectionChanged, INotifyPropertyChanged
     {
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private ISimStruct CurrentState { get; set; }
         private Type CurrentConfigType { get; set; }
@@ -24,12 +29,40 @@ namespace SimWinO.Core
         private FlightSimulatorHelper FSHelper { get; set; } = new FlightSimulatorHelper();
         private ArduinoHelper ArduinoHelper { get; set; } = new ArduinoHelper();
 
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public SimWinOCore()
+        {
+            FSHelper.PropertyChanged += FSHelperOnPropertyChanged;
+            ArduinoHelper.PropertyChanged += ArduinoHelperOnPropertyChanged;
+            RefreshAvailablePorts();
+        }
+
+        private void ArduinoHelperOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsArduinoConnected));
+            OnPropertyChanged(nameof(PortName));
+            OnPropertyChanged(nameof(BaudRate));
+            OnPropertyChanged(nameof(WriteTimeout));
+            OnPropertyChanged(nameof(ReadTimeout));
+        }
+
+        private void FSHelperOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsFlightSimulatorConnected));
+        }
+
         #region Flight Simulator internal logic
 
         private void OnReceiveFromFlightSimulator(object sender, FlightSimulatorHelper.OnReceiveSimObjectEventArgs data)
         {
             // TODO: vérifier si cette ligne cast correctement
-            CurrentState = (ISimStruct) Convert.ChangeType(data.Data, CurrentConfigType);
+            CurrentState = (ISimStruct)Convert.ChangeType(data.Data, CurrentConfigType);
         }
 
         #endregion
@@ -74,7 +107,7 @@ namespace SimWinO.Core
 
                 CurrentConfig = value;
                 CurrentConfigType = structType;
-                CurrentState = (ISimStruct) Activator.CreateInstance(CurrentConfigType);
+                CurrentState = (ISimStruct)Activator.CreateInstance(CurrentConfigType);
                 ArduinoParser = parser;
             }
         }
@@ -83,7 +116,7 @@ namespace SimWinO.Core
         {
             // TODO: disconnect if already connected
 
-            FSHelper = new FlightSimulatorHelper();
+            //FSHelper = new FlightSimulatorHelper();
             var connect = typeof(FlightSimulatorHelper).GetMethod(nameof(FSHelper.Connect));
             var method = connect?.MakeGenericMethod(CurrentConfigType);
             method?.Invoke(FSHelper, null);
@@ -126,17 +159,7 @@ namespace SimWinO.Core
 
         #region Arduino connector API
 
-        private ObservableCollection<string> _availablePorts;
-        public ObservableCollection<string> AvailablePorts
-        {
-            get
-            {
-                if (_availablePorts == null)
-                    RefreshAvailablePorts();
-
-                return _availablePorts;
-            }
-        }
+        public ObservableCollection<string> AvailablePorts { get; set; }
 
         public bool IsArduinoConnected => ArduinoHelper.IsConnected;
 
@@ -168,7 +191,7 @@ namespace SimWinO.Core
         {
             // TODO: disconnect if already connected
 
-            ArduinoHelper = new ArduinoHelper();
+            //ArduinoHelper = new ArduinoHelper();
             ArduinoHelper.Connect();
 
             if (ArduinoHelper.IsConnected)
@@ -187,10 +210,10 @@ namespace SimWinO.Core
 
         public void RefreshAvailablePorts()
         {
-            _availablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
-            
-            if (!_availablePorts.Contains(ArduinoHelper.PortName))
-                ArduinoHelper.PortName = _availablePorts.FirstOrDefault();
+            AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
+
+            if (!AvailablePorts.Contains(ArduinoHelper.PortName))
+                ArduinoHelper.PortName = AvailablePorts.FirstOrDefault();
         }
 
         #endregion

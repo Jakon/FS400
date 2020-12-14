@@ -50,6 +50,7 @@
     <Compile Include="Configs\ArduinoParser.cs" />
     <Compile Include="Configs\DR400.cs" />
     <Compile Include="Configs\ISimStruct.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimWinOCore.cs" />
   </ItemGroup>

@@ -51,6 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BaseCommands.cs" />
+    <Compile Include="Commands\EngineCommands.cs" />
+    <Compile Include="Commands\FuelSystemsCommands.cs" />
+    <Compile Include="Commands\LightsCommands.cs" />
+    <Compile Include="Commands\MiscSystemsCommands.cs" />
     <Compile Include="Enums\DataRequests.cs" />
     <Compile Include="Enums\Definitions.cs" />
     <Compile Include="Enums\Group.cs" />
