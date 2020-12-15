@@ -13,6 +13,10 @@ namespace SimWinO.WPF.ViewModels
         public Command ConnectFSCommand { get; set; }
         public Command DisconnectFSCommand { get; set; }
 
+        public Command SendCommandToArduinoCommand { get; set; }
+
+        public string ArduinoCommand { get; set; }
+
         public MainViewModel()
         {
             ConnectArduinoCommand = new Command(ConnectArduino);
@@ -20,6 +24,7 @@ namespace SimWinO.WPF.ViewModels
             ReloadPortsListCommand = new Command(LoadAvailablePorts);
             ConnectFSCommand = new Command(ConnectFlightSimulator);
             DisconnectFSCommand = new Command(DisconnectFlightSimulator);
+            SendCommandToArduinoCommand = new Command(SendCommandToArduino);
 
             SimWinOCore.Config = "DR400";
         }
@@ -47,6 +52,15 @@ namespace SimWinO.WPF.ViewModels
         public void DisconnectFlightSimulator()
         {
             SimWinOCore.DisconnectFromFlightSimulator();
+        }
+
+        public void SendCommandToArduino()
+        {
+            if (!string.IsNullOrWhiteSpace(ArduinoCommand))
+            {
+                SimWinOCore.SendCommandToArduino(ArduinoCommand);
+                ArduinoCommand = string.Empty;
+            }
         }
     }
 }

@@ -47,6 +47,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -69,6 +70,13 @@
                         FontFamily="Segoe UI Symbol" 
                         ToolTip="Recharger la liste des ports"
                         Command="{Binding ReloadPortsListCommand}" />
+
+                <TextBlock Text="Envoi de commandes à l'Arduino" Margin="10 2" Grid.Column="3" Grid.Row="0" />
+                <TextBox Margin="10 2" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" 
+                         KeyUp="ArduinoCommandTextBox_OnKeyUp"
+                         CharacterCasing="Upper"
+                         Text="{Binding ArduinoCommand, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Row="2" Grid.Column="3" Margin="10 2" Content="Envoyer" Command="{Binding SendCommandToArduinoCommand}" />
 
                 <TextBlock Margin="10 5" Text="Baudrate" Grid.Row="1" Grid.Column="0" />
                 <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="1" Text="{Binding SimWinOCore.BaudRate}" />

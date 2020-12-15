@@ -70,5 +70,10 @@ namespace SimWinO.Arduino
                 WriteTimeout = WriteTimeout
             };
         }
+
+        public void SendCommandToArduino(string command)
+        {
+            Port.WriteLine(command);
+        }
     }
 }

@@ -208,6 +208,12 @@ namespace SimWinO.Core
             }
         }
 
+        public void SendCommandToArduino(string command)
+        {
+            if (ArduinoHelper.IsConnected)
+                ArduinoHelper.SendCommandToArduino(command);
+        }
+
         public void RefreshAvailablePorts()
         {
             AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());

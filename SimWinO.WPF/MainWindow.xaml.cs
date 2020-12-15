@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using SimWinO.WPF.ViewModels;
 
@@ -12,7 +13,7 @@ namespace SimWinO.WPF
     public partial class MainWindow
     {
         #region Flight Sim Code pour se connecter
-        
+
         /* Du code qui sert à interconnecter Flight Sim avec l'appli. J'ai pas tout compris comment ça marche */
         protected HwndSource GetHWinSource()
         {
@@ -47,6 +48,14 @@ namespace SimWinO.WPF
         {
             ViewModel.DisconnectFlightSimulator();
             ViewModel.DisconnectArduino();
+        }
+
+        private void ArduinoCommandTextBox_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ViewModel.SendCommandToArduino();
+            }
         }
     }
 }
