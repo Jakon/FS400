@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace SimWinO.FlightSimulator
+namespace SimWinO.WPF.Utils
 {
     public class Command : ICommand
     {
@@ -25,7 +25,7 @@ namespace SimWinO.FlightSimulator
             return CanExecuteFunc?.Invoke(parameter) ?? true;
         }
 
-        public void Execute(object parameter)
+        public void Execute(object parameter = null)
         {
             CommandAction(parameter);
         }

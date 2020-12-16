@@ -362,4 +362,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Installer related files
-SimWinO.Installer/*.exe
+SimWinO.Installer/Output
+SimWinO.Installer/build
+SimWinO.Installer/ssh_key

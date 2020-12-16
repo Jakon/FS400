@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SimWinO.WPF.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="VersionURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://simwino.rousseur.fr/version.sha256</Value>
+    </Setting>
+    <Setting Name="UpdateURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://simwino.rousseur.fr/SimWinO_setup.exe</Value>
+    </Setting>
+    <Setting Name="VersionFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">version.sha256</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

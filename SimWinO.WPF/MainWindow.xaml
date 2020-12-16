@@ -10,7 +10,7 @@
                  DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
                  Closing="MainWindow_OnClosing"
                  WindowStartupLocation="CenterScreen"
-                 Title="SimWinO.WPF" Height="450" Width="800">
+                 Title="SimWinO" Height="450" Width="800">
     <Grid>
         <Grid.Resources>
             <Style BasedOn="{StaticResource MahApps.Styles.TextBlock}" TargetType="TextBlock">
@@ -122,6 +122,7 @@
         <Grid Grid.Row="1" Background="{StaticResource MahApps.Brushes.Accent}">
             <Grid.Resources>
                 <converters:BoolToConnectedConverter x:Key="BoolToConnectedConverter" />
+                <converters:BoolChoiceToVisibilityConverter VisibilityIfFalse="Collapsed" VisibilityIfTrue="Visible" x:Key="TrueToVisibilityConverter" />
             </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -131,6 +132,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Statuts : " Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
@@ -143,6 +145,7 @@
             <TextBlock Text="Flight Simulator" Grid.Column="4" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
             <Border Grid.Column="5" Margin="5 1 1 1" Background="{Binding SimWinOCore.IsFlightSimulatorConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
 
+            <TextBlock Grid.Column="7" Text="Impossible de vérifier les mises à jour" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" Visibility="{Binding Path=UpdateCheckError, Converter={StaticResource TrueToVisibilityConverter}}" />
         </Grid>
     </Grid>
 </mah:MetroWindow>
