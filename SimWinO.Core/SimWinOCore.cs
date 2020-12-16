@@ -8,7 +8,6 @@ using System.IO.Ports;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using SimWinO.Arduino;
-using SimWinO.Core.Annotations;
 using SimWinO.Core.Configs;
 using SimWinO.FlightSimulator;
 
@@ -28,9 +27,7 @@ namespace SimWinO.Core
 
         private FlightSimulatorHelper FSHelper { get; set; } = new FlightSimulatorHelper();
         private ArduinoHelper ArduinoHelper { get; set; } = new ArduinoHelper();
-
-
-        [NotifyPropertyChangedInvocator]
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

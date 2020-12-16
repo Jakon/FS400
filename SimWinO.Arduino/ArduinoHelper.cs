@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Ports;
-using System.Threading;
 
 namespace SimWinO.Arduino
 {
@@ -29,8 +28,12 @@ namespace SimWinO.Arduino
                 InitPort();
                 Port.Open();
                 IsConnected = Port.IsOpen;
-                Port.WriteLine("S911"); // On allume la Led de l'Arduino pour lui indiquer qu'on est là ! 
-                Port.WriteLine("S201"); // On active toutes les entrées dispo sur l'arduino
+
+                if (IsConnected)
+                {
+                    Port.WriteLine("S911"); // On allume la Led de l'Arduino pour lui indiquer qu'on est là ! 
+                    Port.WriteLine("S201"); // On active toutes les entrées dispo sur l'arduino
+                }
             }
             catch (Exception e)
             {
