@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using System.Windows;
-using MahApps.Metro.Controls.Dialogs;
 using SimWinO.Core;
 using SimWinO.WPF.Properties;
 using SimWinO.WPF.Utils;
@@ -13,7 +11,7 @@ namespace SimWinO.WPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public SimWinOCore SimWinOCore { get; } = new SimWinOCore();
+        public SimWinOCore SimWinOCore { get; } = new();
 
         public Command CheckForUpdateCommand { get; set; }
         public Command ConnectArduinoCommand { get; set; }
@@ -28,54 +26,61 @@ namespace SimWinO.WPF.ViewModels
 
         public MainViewModel()
         {
-            CheckForUpdateCommand = new Command(async () => await CheckForUpdate());
+            CheckForUpdateCommand = new Command(CheckForUpdate);
             ConnectArduinoCommand = new Command(ConnectArduino);
             DisconnectArduinoCommand = new Command(DisconnectArduino);
             ReloadPortsListCommand = new Command(LoadAvailablePorts);
             ConnectFSCommand = new Command(ConnectFlightSimulator);
             DisconnectFSCommand = new Command(DisconnectFlightSimulator);
             SendCommandToArduinoCommand = new Command(SendCommandToArduino);
-
-            CheckForUpdateCommand.Execute();
             
             SimWinOCore.Config = "DR400";
         }
 
-        private async Task CheckForUpdate()
+        public void CheckForUpdate()
         {
             try
             {
                 using var client = new WebClient();
 
-                var remoteVersion = await client.DownloadStringTaskAsync(Settings.Default.VersionURL);
-                var localVersion = await File.ReadAllTextAsync(Path.Join(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.VersionFile));
+                var remoteVersion = client.DownloadString(Settings.Default.VersionURL);
+                var localVersion = File.ReadAllText(Path.Join(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.VersionFile));
 
                 var shouldUpdate = remoteVersion != localVersion;
 
-                if (shouldUpdate)
+                if (!shouldUpdate)
+                    return;
+                
+                var updateDialog = new UpdateDialog();
+                var result = updateDialog.ShowDialog();
+
+                if (result != true)
+                    return;
+                    
+                var downloadDialog = new DownloadingDialog();
+                        
+                Task.Run(async () =>
                 {
-                    var updateDialog = new UpdateDialog();
-                    var result = updateDialog.ShowDialog();
+                    using var downloadClient = new WebClient();
+                            
+                    var setupFile = Path.Join(Path.GetTempPath(), "SimWinO_update.exe");
+                    Debug.WriteLine(setupFile);
+                    await downloadClient.DownloadFileTaskAsync(Settings.Default.UpdateURL, setupFile);
 
-                    if (result == true)
+                    var process = new Process
                     {
-                        var setupFile = Path.Join(Path.GetTempPath(), "SimWinO_update.exe");
-                        Debug.WriteLine(setupFile);
-                        await client.DownloadFileTaskAsync(Settings.Default.UpdateURL, setupFile);
-
-                        var process = new Process
+                        StartInfo =
                         {
-                            StartInfo =
-                            {
-                                FileName = setupFile,
-                                Arguments = "/silent /nocancel /norestart /closeapplications"
-                            }
-                        };
+                            FileName = setupFile,
+                            Arguments = "/silent /nocancel /norestart /closeapplications"
+                        }
+                    };
 
-                        process.Start();
-                        Environment.Exit(0);
-                    }
-                }
+                    process.Start();
+                    Environment.Exit(0);
+                });
+                        
+                downloadDialog.ShowDialog();
             }
             catch (Exception e)
             {

@@ -8,6 +8,7 @@
                  xmlns:converters="clr-namespace:SimWinO.WPF.Converters"
                  mc:Ignorable="d"
                  DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
+                 Loaded="MainWindow_OnLoaded"
                  Closing="MainWindow_OnClosing"
                  WindowStartupLocation="CenterScreen"
                  Title="SimWinO" Height="450" Width="800">

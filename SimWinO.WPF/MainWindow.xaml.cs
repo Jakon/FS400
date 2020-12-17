@@ -57,5 +57,10 @@ namespace SimWinO.WPF
                 ViewModel.SendCommandToArduino();
             }
         }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.CheckForUpdate();
+        }
     }
 }

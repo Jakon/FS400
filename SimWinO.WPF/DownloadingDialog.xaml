@@ -1,0 +1,21 @@
+﻿<mah:MetroWindow x:Class="SimWinO.WPF.DownloadingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimWinO.WPF"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        ShowCloseButton="False"
+        ShowMaxRestoreButton="False"
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="DownloadingDialog_OnContentRendered"
+        Title="Mise à jour de SimWinO" Height="150" Width="350">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Téléchargement de la mise à jour..." />
+    </Grid>
+</mah:MetroWindow>

@@ -25,7 +25,7 @@ namespace SimWinO.WPF.Utils
             return CanExecuteFunc?.Invoke(parameter) ?? true;
         }
 
-        public void Execute(object parameter = null)
+        public void Execute(object parameter)
         {
             CommandAction(parameter);
         }
