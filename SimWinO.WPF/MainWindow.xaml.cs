@@ -42,6 +42,14 @@ namespace SimWinO.WPF
             ViewModel = new MainViewModel();
 
             InitializeComponent();
+
+            ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
+        }
+
+        private void ViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainViewModel.PlaneLocation))
+                BingMap.SetView(ViewModel.PlaneLocation, 16);
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)

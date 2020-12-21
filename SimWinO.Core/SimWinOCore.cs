@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using Microsoft.Maps.MapControl.WPF;
 using SimWinO.Arduino;
 using SimWinO.Core.Configs;
 using SimWinO.FlightSimulator;
@@ -27,7 +29,7 @@ namespace SimWinO.Core
 
         private FlightSimulatorHelper FSHelper { get; set; } = new FlightSimulatorHelper();
         private ArduinoHelper ArduinoHelper { get; set; } = new ArduinoHelper();
-        
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -38,6 +40,8 @@ namespace SimWinO.Core
             FSHelper.PropertyChanged += FSHelperOnPropertyChanged;
             ArduinoHelper.PropertyChanged += ArduinoHelperOnPropertyChanged;
             RefreshAvailablePorts();
+
+            PlaneLocation = new Location(0, 0);
         }
 
         private void ArduinoHelperOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -60,6 +64,13 @@ namespace SimWinO.Core
         {
             // TODO: vérifier si cette ligne cast correctement
             CurrentState = (ISimStruct)Convert.ChangeType(data.Data, CurrentConfigType);
+
+            UpdatePosition();
+        }
+
+        public void UpdatePosition()
+        {
+            PlaneLocation = new Location(PlaneLatitude, PlaneLongitude);
         }
 
         #endregion
@@ -119,6 +130,8 @@ namespace SimWinO.Core
             method?.Invoke(FSHelper, null);
 
             FSHelper.OnReceiveSimObjectData += OnReceiveFromFlightSimulator;
+
+            PlaneLocation = new Location(PlaneLatitude, PlaneLongitude);
         }
 
         public void DisconnectFromFlightSimulator()
@@ -151,6 +164,10 @@ namespace SimWinO.Core
 
             return IntPtr.Zero;
         }
+        public double PlaneLongitude => CurrentState.PlaneLongitude;
+        public double PlaneLatitude => CurrentState.PlaneLatitude;
+
+        public Location PlaneLocation { get; set; }
 
         #endregion
 

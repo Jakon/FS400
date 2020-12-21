@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Maps.MapControl.WPF;
 using SimWinO.Core;
 using SimWinO.WPF.Properties;
 using SimWinO.WPF.Utils;
@@ -11,7 +13,7 @@ namespace SimWinO.WPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public SimWinOCore SimWinOCore { get; } = new();
+        public SimWinOCore SimWinOCore { get; } = new SimWinOCore();
 
         public Command CheckForUpdateCommand { get; set; }
         public Command ConnectArduinoCommand { get; set; }
@@ -20,6 +22,8 @@ namespace SimWinO.WPF.ViewModels
         public Command ConnectFSCommand { get; set; }
         public Command DisconnectFSCommand { get; set; }
         public Command SendCommandToArduinoCommand { get; set; }
+
+        public Location PlaneLocation { get; set; }
 
         public bool UpdateCheckError { get; set; }
         public string ArduinoCommand { get; set; }
@@ -33,8 +37,17 @@ namespace SimWinO.WPF.ViewModels
             ConnectFSCommand = new Command(ConnectFlightSimulator);
             DisconnectFSCommand = new Command(DisconnectFlightSimulator);
             SendCommandToArduinoCommand = new Command(SendCommandToArduino);
-            
+
             SimWinOCore.Config = "DR400";
+            SimWinOCore.PropertyChanged += SimWinOCoreOnPropertyChanged;
+
+            PlaneLocation = new Location(0, 0);
+        }
+
+        private void SimWinOCoreOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SimWinOCore.PlaneLocation))
+                PlaneLocation = SimWinOCore.PlaneLocation;
         }
 
         public void CheckForUpdate()
@@ -50,19 +63,19 @@ namespace SimWinO.WPF.ViewModels
 
                 if (!shouldUpdate)
                     return;
-                
+
                 var updateDialog = new UpdateDialog();
                 var result = updateDialog.ShowDialog();
 
                 if (result != true)
                     return;
-                    
+
                 var downloadDialog = new DownloadingDialog();
-                        
+
                 Task.Run(async () =>
                 {
                     using var downloadClient = new WebClient();
-                            
+
                     var setupFile = Path.Join(Path.GetTempPath(), "SimWinO_update.exe");
                     Debug.WriteLine(setupFile);
                     await downloadClient.DownloadFileTaskAsync(Settings.Default.UpdateURL, setupFile);
@@ -79,7 +92,7 @@ namespace SimWinO.WPF.ViewModels
                     process.Start();
                     Environment.Exit(0);
                 });
-                        
+
                 downloadDialog.ShowDialog();
             }
             catch (Exception e)
@@ -88,7 +101,7 @@ namespace SimWinO.WPF.ViewModels
                 UpdateCheckError = false;
             }
         }
-        
+
         private void ConnectArduino()
         {
             SimWinOCore.ConnectToArduino();

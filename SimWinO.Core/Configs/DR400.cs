@@ -38,6 +38,8 @@ namespace SimWinO.Core.Configs
 
         public double LeftMagnetoFSValue { get; set; }
 
+        public double PlaneLatitude { get; set; }
+        public double PlaneLongitude { get; set; }
 
         // Ici on référence les valeurs mieux typées. CE sera plus simple à gérer
         public bool IsStarterOn => Convert.ToBoolean(StarterFSValue);

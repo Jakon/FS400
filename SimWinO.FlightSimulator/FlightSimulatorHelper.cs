@@ -175,9 +175,9 @@ namespace SimWinO.FlightSimulator
             }
 
             // Il reste à assigner les différentes variables à récupérer au niveau du simulateur
-            foreach (var name in SimVariables.Names)
+            foreach (var variable in SimVariables.Variables)
             {
-                SimConnect.AddToDataDefinition(DEFINITIONS.Dummy, name, "", SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+                SimConnect.AddToDataDefinition(DEFINITIONS.Dummy, variable.PropertyName, variable.PropertyType, SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
             }
 
             SimConnect.RegisterDataDefineStruct<T>(DEFINITIONS.Dummy);
