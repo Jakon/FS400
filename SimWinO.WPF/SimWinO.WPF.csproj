@@ -18,10 +18,11 @@
   <ItemGroup>
     <PackageReference Include="ControlzEx" Version="4.4.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -29,12 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimWinO.Core\SimWinO.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Maps.MapControl.WPF">
-      <HintPath>..\SimWinO.Core\Resources\Microsoft.Maps.MapControl.WPF.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

@@ -14,10 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.1">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.15.0.24505">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -27,12 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SimWinO.Arduino\SimWinO.Arduino.csproj" />
     <ProjectReference Include="..\SimWinO.FlightSimulator\SimWinO.FlightSimulator.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.Maps.MapControl.WPF">
-      <HintPath>Resources\Microsoft.Maps.MapControl.WPF.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
