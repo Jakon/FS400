@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl>
+        <TabControl SelectionChanged="Tabs_OnSelectionChanged">
             <TabItem Header="Connexions">
                 <Grid>
                     <Grid.Resources>
@@ -130,7 +130,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Maps">
+            <TabItem Name="MapsTab" Header="Maps">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -142,7 +142,7 @@
                         <TextBlock Text="{Binding PlaneLocation}" Margin="10 5" />
                     </StackPanel>
 
-                    <wpf:Map Mode="AerialWithLabels" CredentialsProvider="Ajd2i1Te41xx2-us7UBRKPy-C-MYW0oeISO9I1dD0mYMYbvaXCSW8Eas6Jz9yRSx" 
+                    <wpf:Map Mode="AerialWithLabels" 
                              Grid.Row="1"
                              ZoomLevel="{Binding ZoomLevel}"
                              Name="BingMap"

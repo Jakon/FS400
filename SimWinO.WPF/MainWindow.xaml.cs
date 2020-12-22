@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using Microsoft.Maps.MapControl.WPF;
 using SimWinO.WPF.ViewModels;
 
 namespace SimWinO.WPF
@@ -63,6 +65,16 @@ namespace SimWinO.WPF
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             ViewModel.CheckForUpdate();
+        }
+
+        private void Tabs_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            BingMap.CredentialsProvider = MapsTab?.IsSelected switch
+            {
+                true => new ApplicationIdCredentialsProvider("Ajd2i1Te41xx2-us7UBRKPy-C-MYW0oeISO9I1dD0mYMYbvaXCSW8Eas6Jz9yRSx"),
+                false => null,
+                _ => BingMap.CredentialsProvider
+            };
         }
     }
 }
