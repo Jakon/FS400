@@ -65,10 +65,16 @@ namespace SimWinO.WPF
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             ViewModel.CheckForUpdate();
+
+            BingMap.MouseMove += ViewModel.DisableMouseEvent;
+            BingMap.MouseWheel += ViewModel.DisableMouseWheelEvent;
         }
 
         private void Tabs_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (BingMap == null)
+                return;
+            
             BingMap.CredentialsProvider = MapsTab?.IsSelected switch
             {
                 true => new ApplicationIdCredentialsProvider("Ajd2i1Te41xx2-us7UBRKPy-C-MYW0oeISO9I1dD0mYMYbvaXCSW8Eas6Jz9yRSx"),

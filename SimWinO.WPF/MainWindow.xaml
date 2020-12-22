@@ -134,6 +134,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -142,12 +143,16 @@
                         <TextBlock Text="{Binding PlaneLocation}" Margin="10 5" />
                     </StackPanel>
 
+                    <StackPanel Grid.Row="1"  Orientation="Horizontal">
+                        <mah:ToggleSwitch IsOn="{Binding MapFollowPlane}" Margin="8 3">Suivi de l'avion</mah:ToggleSwitch>
+                        <mah:ToggleSwitch IsOn="{Binding MapAutoZoom}" Margin="8 3">Zoom automatique</mah:ToggleSwitch>
+                    </StackPanel>
+
                     <wpf:Map Mode="AerialWithLabels" 
-                             Grid.Row="1"
+                             Grid.Row="2"
                              ZoomLevel="{Binding ZoomLevel}"
-                             Name="BingMap"
-                             Center="{Binding PlaneLocation}">
-                        <wpf:Pushpin Location="{Binding PlaneLocation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             Name="BingMap">
+                        <wpf:Pushpin Location="{Binding PlaneLocation}"/>
                     </wpf:Map>
                 </Grid>
             </TabItem>

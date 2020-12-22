@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Input.Manipulations;
 using Microsoft.Maps.MapControl.WPF;
 using SimWinO.Core;
 using SimWinO.WPF.Properties;
@@ -26,8 +28,44 @@ namespace SimWinO.WPF.ViewModels
         public Command SendCommandToArduinoCommand { get; }
 
         public Location PlaneLocation { get; set; } = new(0, 0);
-        public double ZoomLevel { get; set; } = 20;
+        public double ZoomLevel { get; set; } = 7;
 
+        private bool _mapFollowPlane = true;
+        public bool MapFollowPlane
+        {
+            get => _mapFollowPlane;
+            set
+            {
+                if (value && !_mapFollowPlane)
+                    BingMap.MouseMove += DisableMouseEvent;
+                else if (!value)
+                {
+                    BingMap.MouseMove -= DisableMouseEvent;
+                    MapAutoZoom = false;
+                }
+                
+                _mapFollowPlane = value;
+            }
+        }
+
+        private bool _mapAutoZoom = true;
+        public bool MapAutoZoom
+        {
+            get => _mapAutoZoom;
+            set
+            {
+                if (value && !_mapAutoZoom)
+                {
+                    BingMap.MouseWheel += DisableMouseWheelEvent;
+                    MapFollowPlane = true;
+                }
+                else if (!value)
+                    BingMap.MouseWheel -= DisableMouseWheelEvent;
+                
+                _mapAutoZoom = value;
+            }
+        }
+        
         public bool UpdateCheckError { get; set; }
         public string ArduinoCommand { get; set; }
         public int BaudRate { get; set; } = 115200;
@@ -47,7 +85,7 @@ namespace SimWinO.WPF.ViewModels
             ConnectFSCommand = new Command(ConnectFlightSimulator);
             DisconnectFSCommand = new Command(DisconnectFlightSimulator);
             SendCommandToArduinoCommand = new Command(SendCommandToArduino);
-
+            
             SimWinOCore.Config = "DR400";
             PortName = SimWinOCore.AvailablePorts.FirstOrDefault();
             
@@ -67,8 +105,28 @@ namespace SimWinO.WPF.ViewModels
             
             // Bing Maps
             PlaneLocation = new Location(e.CurrentState.SimState.PlaneLatitude, e.CurrentState.SimState.PlaneLongitude);
-            ZoomLevel = Math.Max((300 - e.CurrentState.SimState.GroundVelocity) / 20 + 7, 7);
-            BingMap.SetView(PlaneLocation, ZoomLevel);
+
+            if (MapAutoZoom)
+                ZoomLevel = Math.Max((300 - e.CurrentState.SimState.GroundVelocity) / 20 + 7, 7);
+
+            if (MapFollowPlane && MapAutoZoom)
+            {
+                BingMap.SetView(PlaneLocation, ZoomLevel);
+            }
+            else if (MapFollowPlane)
+            {
+                BingMap.Center = PlaneLocation;
+            }
+        }
+        
+        public void DisableMouseWheelEvent(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+        }
+        
+        public void DisableMouseEvent(object sender, MouseEventArgs e)
+        {
+            e.Handled = true;
         }
         
         public void CheckForUpdate()
