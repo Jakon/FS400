@@ -15,6 +15,8 @@ namespace SimWinO.WPF.ViewModels
     {
         public SimWinOCore SimWinOCore { get; } = new SimWinOCore();
 
+        public Map BingMap { get; set; }
+
         public Command CheckForUpdateCommand { get; set; }
         public Command ConnectArduinoCommand { get; set; }
         public Command DisconnectArduinoCommand { get; set; }
@@ -23,7 +25,8 @@ namespace SimWinO.WPF.ViewModels
         public Command DisconnectFSCommand { get; set; }
         public Command SendCommandToArduinoCommand { get; set; }
 
-        public Location PlaneLocation { get; set; }
+        public Location PlaneLocation => SimWinOCore.PlaneLocation;
+        public double ZoomLevel => SimWinOCore.ZoomLevel;
 
         public bool UpdateCheckError { get; set; }
         public string ArduinoCommand { get; set; }
@@ -40,14 +43,12 @@ namespace SimWinO.WPF.ViewModels
 
             SimWinOCore.Config = "DR400";
             SimWinOCore.PropertyChanged += SimWinOCoreOnPropertyChanged;
-
-            PlaneLocation = new Location(0, 0);
         }
 
         private void SimWinOCoreOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SimWinOCore.PlaneLocation))
-                PlaneLocation = SimWinOCore.PlaneLocation;
+                BingMap.SetView(PlaneLocation, ZoomLevel);
         }
 
         public void CheckForUpdate()

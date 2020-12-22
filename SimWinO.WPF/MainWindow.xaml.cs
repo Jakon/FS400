@@ -43,6 +43,7 @@ namespace SimWinO.WPF
 
             InitializeComponent();
 
+            ViewModel.BingMap = BingMap;
             ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         }
 

@@ -70,7 +70,7 @@ namespace SimWinO.Core
 
         public void UpdatePosition()
         {
-            PlaneLocation = new Location(PlaneLatitude, PlaneLongitude);
+            PlaneLocation = new Location(CurrentState.PlaneLatitude, CurrentState.PlaneLongitude);
         }
 
         #endregion
@@ -131,7 +131,7 @@ namespace SimWinO.Core
 
             FSHelper.OnReceiveSimObjectData += OnReceiveFromFlightSimulator;
 
-            PlaneLocation = new Location(PlaneLatitude, PlaneLongitude);
+            UpdatePosition();
         }
 
         public void DisconnectFromFlightSimulator()
@@ -164,10 +164,12 @@ namespace SimWinO.Core
 
             return IntPtr.Zero;
         }
-        public double PlaneLongitude => CurrentState.PlaneLongitude;
-        public double PlaneLatitude => CurrentState.PlaneLatitude;
+        //public double PlaneLongitude => CurrentState.PlaneLongitude;
+        //public double PlaneLatitude => CurrentState.PlaneLatitude;
 
         public Location PlaneLocation { get; set; }
+
+        public double ZoomLevel => Math.Max((300 - CurrentState.GroundVelocity) / 20 + 7, 7);
 
         #endregion
 

@@ -4,5 +4,6 @@
     {
         public double PlaneLatitude { get; set; }
         public double PlaneLongitude { get; set; }
+        public double GroundVelocity { get; set; }
     }
 }

@@ -40,6 +40,7 @@ namespace SimWinO.Core.Configs
 
         public double PlaneLatitude { get; set; }
         public double PlaneLongitude { get; set; }
+        public double GroundVelocity { get; set; }
 
         // Ici on référence les valeurs mieux typées. CE sera plus simple à gérer
         public bool IsStarterOn => Convert.ToBoolean(StarterFSValue);

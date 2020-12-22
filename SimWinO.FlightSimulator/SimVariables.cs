@@ -26,6 +26,7 @@
             
             new SimVariable("PLANE LATITUDE", "Degrees"), // Latitude de l'avion
             new SimVariable("PLANE LONGITUDE", "Degrees"), // Longitude de l'avion
+            new SimVariable("GROUND VELOCITY", "knots"), // Longitude de l'avion
         };
     }
 

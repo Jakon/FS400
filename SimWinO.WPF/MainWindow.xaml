@@ -154,12 +154,25 @@
             </Grid>
         </TabItem>
         <TabItem Header="Maps">
-            <wpf:Map Mode="AerialWithLabels" CredentialsProvider="Ajd2i1Te41xx2-us7UBRKPy-C-MYW0oeISO9I1dD0mYMYbvaXCSW8Eas6Jz9yRSx" 
-                     ZoomLevel="16"
-                     Name="BingMap"
-                     Center="{Binding PlaneLocation}">
-                <wpf:Pushpin Location="{Binding PlaneLocation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-            </wpf:Map>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding SimWinOCore.ZoomLevel}" Margin="10 5" />
+                    <TextBlock Text="{Binding SimWinOCore.PlaneLocation}" Margin="10 5" />
+                </StackPanel>
+
+                <wpf:Map Mode="AerialWithLabels" CredentialsProvider="Ajd2i1Te41xx2-us7UBRKPy-C-MYW0oeISO9I1dD0mYMYbvaXCSW8Eas6Jz9yRSx" 
+                         Grid.Row="1"
+                         ZoomLevel="{Binding SimWinOCore.ZoomLevel}"
+                         Name="BingMap"
+                         Center="{Binding SimWinOCore.PlaneLocation}">
+                    <wpf:Pushpin Location="{Binding SimWinOCore.PlaneLocation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </wpf:Map>
+            </Grid>
         </TabItem>
     </TabControl>
 </mah:MetroWindow>
