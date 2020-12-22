@@ -65,40 +65,40 @@
 
                         <TextBlock Margin="10 5" Text="Port" Grid.Row="0" Grid.Column="0" />
                         <ComboBox Grid.Column="1" Grid.Row="0" 
-                          Margin="0 2"
-                          ItemsSource="{Binding SimWinOCore.AvailablePorts}" 
-                          SelectedItem="{Binding SimWinOCore.PortName}" />
+                            Margin="0 2"
+                            ItemsSource="{Binding SimWinOCore.AvailablePorts}" 
+                            SelectedItem="{Binding PortName}" />
                         <Button Grid.Row="0" Grid.Column="2"
-                        Margin="2"
-                        Content="&#xE117;" 
-                        FontFamily="Segoe UI Symbol" 
-                        ToolTip="Recharger la liste des ports"
-                        Command="{Binding ReloadPortsListCommand}" />
+                            Margin="2"
+                            Content="&#xE117;" 
+                            FontFamily="Segoe UI Symbol" 
+                            ToolTip="Recharger la liste des ports"
+                            Command="{Binding ReloadPortsListCommand}" />
 
                         <TextBlock Text="Envoi de commandes à l'Arduino" Margin="10 2" Grid.Column="3" Grid.Row="0" />
                         <TextBox Margin="10 2" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" 
-                         KeyUp="ArduinoCommandTextBox_OnKeyUp"
-                         CharacterCasing="Upper"
-                         Text="{Binding ArduinoCommand, UpdateSourceTrigger=PropertyChanged}" />
+                            KeyUp="ArduinoCommandTextBox_OnKeyUp"
+                            CharacterCasing="Upper"
+                            Text="{Binding ArduinoCommand, UpdateSourceTrigger=PropertyChanged}" />
                         <Button Grid.Row="2" Grid.Column="3" Margin="10 2" Content="Envoyer" Command="{Binding SendCommandToArduinoCommand}" />
 
                         <TextBlock Margin="10 5" Text="Baudrate" Grid.Row="1" Grid.Column="0" />
-                        <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="1" Text="{Binding SimWinOCore.BaudRate}" />
+                        <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="1" Text="{Binding BaudRate}" />
 
                         <TextBlock Margin="10 5" Text="Read Timeout" Grid.Row="2" Grid.Column="0" />
-                        <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="2" Text="{Binding SimWinOCore.ReadTimeout}" />
+                        <TextBox Grid.Column="1" Width="100" Margin="0 2" Grid.Row="2" Text="{Binding ReadTimeout}" />
 
                         <TextBlock Margin="10 5" Text="Write Timeout" Grid.Row="3" Grid.Column="0" />
-                        <TextBox Grid.Column="1" Width="100" Grid.Row="3" Margin="0 2" Text="{Binding SimWinOCore.WriteTimeout}" />
+                        <TextBox Grid.Column="1" Width="100" Grid.Row="3" Margin="0 2" Text="{Binding WriteTimeout}" />
 
                         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Se connecter"
-                        Command="{Binding ConnectArduinoCommand}"
-                        Margin="10 0 0 0"
-                        Visibility="{Binding SimWinOCore.IsArduinoConnected, Converter={StaticResource FalseToVisibilityConverter}}" />
+                            Command="{Binding ConnectArduinoCommand}"
+                            Margin="10 0 0 0"
+                            Visibility="{Binding IsArduinoConnected, Converter={StaticResource FalseToVisibilityConverter}}" />
                         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Content="Se déconnecter" 
-                        Command="{Binding DisconnectArduinoCommand}"
-                        Margin="10 0 0 0"
-                        Visibility="{Binding SimWinOCore.IsArduinoConnected, Converter={StaticResource TrueToVisibilityConverter}}" />
+                            Command="{Binding DisconnectArduinoCommand}"
+                            Margin="10 0 0 0"
+                            Visibility="{Binding IsArduinoConnected, Converter={StaticResource TrueToVisibilityConverter}}" />
                     </Grid>
 
                     <Border BorderThickness="0 0 0 1" 
@@ -117,9 +117,9 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Button Content="Se connecter" Command="{Binding ConnectFSCommand}" Grid.Row="0"
-                        Visibility="{Binding SimWinOCore.IsFlightSimulatorConnected, Converter={StaticResource FalseToVisibilityConverter}}"  />
+                        Visibility="{Binding IsFlightSimulatorConnected, Converter={StaticResource FalseToVisibilityConverter}}"  />
                         <Button Content="Se déconnecter" Command="{Binding DisconnectFSCommand}" Grid.Row="0"
-                        Visibility="{Binding SimWinOCore.IsFlightSimulatorConnected, Converter={StaticResource TrueToVisibilityConverter}}" />
+                        Visibility="{Binding IsFlightSimulatorConnected, Converter={StaticResource TrueToVisibilityConverter}}" />
                     </Grid>
                 </Grid>
 
@@ -142,12 +142,12 @@
                     <TextBlock Text="Statuts : " Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
 
                     <TextBlock Text="Arduino" Grid.Column="1" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
-                    <Border Grid.Column="2" Margin="5 1 1 1" Background="{Binding SimWinOCore.IsArduinoConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
+                    <Border Grid.Column="2" Margin="5 1 1 1" Background="{Binding IsArduinoConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
 
                     <Border Grid.Column="3" Background="{StaticResource MahApps.Brushes.IdealForeground}" BorderThickness="1 0 0 0" Width="2" Margin="5 1" />
 
                     <TextBlock Text="Flight Simulator" Grid.Column="4" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
-                    <Border Grid.Column="5" Margin="5 1 1 1" Background="{Binding SimWinOCore.IsFlightSimulatorConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
+                    <Border Grid.Column="5" Margin="5 1 1 1" Background="{Binding IsFlightSimulatorConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
 
                     <TextBlock Grid.Column="7" Text="Impossible de vérifier les mises à jour" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" Visibility="{Binding Path=UpdateCheckError, Converter={StaticResource TrueToVisibilityConverter}}" />
                 </Grid>
@@ -161,16 +161,16 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding SimWinOCore.ZoomLevel}" Margin="10 5" />
-                    <TextBlock Text="{Binding SimWinOCore.PlaneLocation}" Margin="10 5" />
+                    <TextBlock Text="{Binding ZoomLevel}" Margin="10 5" />
+                    <TextBlock Text="{Binding PlaneLocation}" Margin="10 5" />
                 </StackPanel>
 
                 <wpf:Map Mode="AerialWithLabels" CredentialsProvider="Ajd2i1Te41xx2-us7UBRKPy-C-MYW0oeISO9I1dD0mYMYbvaXCSW8Eas6Jz9yRSx" 
                          Grid.Row="1"
-                         ZoomLevel="{Binding SimWinOCore.ZoomLevel}"
+                         ZoomLevel="{Binding ZoomLevel}"
                          Name="BingMap"
-                         Center="{Binding SimWinOCore.PlaneLocation}">
-                    <wpf:Pushpin Location="{Binding SimWinOCore.PlaneLocation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Center="{Binding PlaneLocation}">
+                    <wpf:Pushpin Location="{Binding PlaneLocation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </wpf:Map>
             </Grid>
         </TabItem>

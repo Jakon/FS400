@@ -1,7 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Maps.MapControl.WPF;
@@ -13,24 +13,31 @@ namespace SimWinO.WPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public SimWinOCore SimWinOCore { get; } = new SimWinOCore();
+        public SimWinOCore SimWinOCore { get; } = new();
 
         public Map BingMap { get; set; }
 
-        public Command CheckForUpdateCommand { get; set; }
-        public Command ConnectArduinoCommand { get; set; }
-        public Command DisconnectArduinoCommand { get; set; }
-        public Command ReloadPortsListCommand { get; set; }
-        public Command ConnectFSCommand { get; set; }
-        public Command DisconnectFSCommand { get; set; }
-        public Command SendCommandToArduinoCommand { get; set; }
+        public Command CheckForUpdateCommand { get; }
+        public Command ConnectArduinoCommand { get; }
+        public Command DisconnectArduinoCommand { get; }
+        public Command ReloadPortsListCommand { get; }
+        public Command ConnectFSCommand { get; }
+        public Command DisconnectFSCommand { get; }
+        public Command SendCommandToArduinoCommand { get; }
 
-        public Location PlaneLocation => SimWinOCore.PlaneLocation;
-        public double ZoomLevel => SimWinOCore.ZoomLevel;
+        public Location PlaneLocation { get; set; } = new(0, 0);
+        public double ZoomLevel { get; set; } = 20;
 
         public bool UpdateCheckError { get; set; }
         public string ArduinoCommand { get; set; }
+        public int BaudRate { get; set; } = 115200;
+        public string PortName { get; set; }
+        public int ReadTimeout { get; set; } = 250;
+        public int WriteTimeout { get; set; } = 250;
 
+        public bool IsArduinoConnected { get; set; }
+        public bool IsFlightSimulatorConnected { get; set; }
+        
         public MainViewModel()
         {
             CheckForUpdateCommand = new Command(CheckForUpdate);
@@ -42,15 +49,28 @@ namespace SimWinO.WPF.ViewModels
             SendCommandToArduinoCommand = new Command(SendCommandToArduino);
 
             SimWinOCore.Config = "DR400";
-            SimWinOCore.PropertyChanged += SimWinOCoreOnPropertyChanged;
+            PortName = SimWinOCore.AvailablePorts.FirstOrDefault();
+            
+            SimWinOCore.ArduinoStateChanged += SimWinOCoreOnArduinoStateChanged;
+            SimWinOCore.FlightSimulatorStateChanged += SimWinOCoreOnFlightSimulatorStateChanged;
         }
 
-        private void SimWinOCoreOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void SimWinOCoreOnArduinoStateChanged(object sender, ArduinoStateEventArgs e)
         {
-            if (e.PropertyName == nameof(SimWinOCore.PlaneLocation))
-                BingMap.SetView(PlaneLocation, ZoomLevel);
+            IsArduinoConnected = e.CurrentState.IsArduinoConnected;
         }
-
+        
+        private void SimWinOCoreOnFlightSimulatorStateChanged(object sender, FlightSimulatorStateEventArgs e)
+        {
+            // Flight Simulator
+            IsFlightSimulatorConnected = e.CurrentState.IsFlightSimulatorConnected;
+            
+            // Bing Maps
+            PlaneLocation = new Location(e.CurrentState.SimState.PlaneLatitude, e.CurrentState.SimState.PlaneLongitude);
+            ZoomLevel = Math.Max((300 - e.CurrentState.SimState.GroundVelocity) / 20 + 7, 7);
+            BingMap.SetView(PlaneLocation, ZoomLevel);
+        }
+        
         public void CheckForUpdate()
         {
             try
@@ -105,7 +125,7 @@ namespace SimWinO.WPF.ViewModels
 
         private void ConnectArduino()
         {
-            SimWinOCore.ConnectToArduino();
+            SimWinOCore.ConnectToArduino(PortName, BaudRate, ReadTimeout, WriteTimeout);
         }
 
         public void DisconnectArduino()
@@ -116,6 +136,9 @@ namespace SimWinO.WPF.ViewModels
         private void LoadAvailablePorts()
         {
             SimWinOCore.RefreshAvailablePorts();
+            
+            if (!SimWinOCore.AvailablePorts.Contains(PortName))
+                PortName = SimWinOCore.AvailablePorts.FirstOrDefault();
         }
 
         private void ConnectFlightSimulator()
@@ -130,11 +153,11 @@ namespace SimWinO.WPF.ViewModels
 
         public void SendCommandToArduino()
         {
-            if (!string.IsNullOrWhiteSpace(ArduinoCommand))
-            {
-                SimWinOCore.SendCommandToArduino(ArduinoCommand);
-                ArduinoCommand = string.Empty;
-            }
+            if (string.IsNullOrWhiteSpace(ArduinoCommand))
+                return;
+            
+            SimWinOCore.SendCommandToArduino(ArduinoCommand);
+            ArduinoCommand = string.Empty;
         }
     }
 }
