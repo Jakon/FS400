@@ -1,4 +1,14 @@
-﻿[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+﻿# Custom functions
+function Get-RandomHex {
+    param(
+        [int] $Bits = 256
+    )
+    $bytes = new-object 'System.Byte[]' ($Bits/8)
+    (new-object System.Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes)
+    (new-object System.Runtime.Remoting.Metadata.W3cXsd2001.SoapHexBinary @(,$bytes)).ToString()
+}
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 # Install NuGet provider if needed
 if ((Get-PackageProvider -Name NuGet).version -lt 2.8.5.201 ) {
@@ -70,7 +80,7 @@ Pop-Location
 # Hash generation
 $HashFile = "version.sha256"
 $HashPath = -join("build\", $HashFile)
-Set-Content -Path $HashPath -Value $(Get-FileHash -Path "build\SimWinO.WPF.exe").Hash
+Set-Content -Path $HashPath -Value $(Get-RandomHex)
 
 Write-Output "Compilation et compression de l'installeur..."
 
