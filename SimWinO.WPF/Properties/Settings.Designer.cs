@@ -49,5 +49,41 @@ namespace SimWinO.WPF.Properties {
                 return ((string)(this["VersionFile"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FollowPlane {
+            get {
+                return ((bool)(this["FollowPlane"]));
+            }
+            set {
+                this["FollowPlane"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoZoom {
+            get {
+                return ((bool)(this["AutoZoom"]));
+            }
+            set {
+                this["AutoZoom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFFFF")]
+        public global::System.Windows.Media.Color PlaneColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["PlaneColor"]));
+            }
+            set {
+                this["PlaneColor"] = value;
+            }
+        }
     }
 }

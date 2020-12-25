@@ -5,11 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Input.Manipulations;
 using Microsoft.Maps.MapControl.WPF;
 using SimWinO.Core;
 using SimWinO.WPF.Properties;
 using SimWinO.WPF.Utils;
+using System.Windows.Media;
 
 namespace SimWinO.WPF.ViewModels
 {
@@ -29,8 +29,23 @@ namespace SimWinO.WPF.ViewModels
 
         public Location PlaneLocation { get; set; } = new(0, 0);
         public double ZoomLevel { get; set; } = 7;
+        public double PlaneOrientation { get; set; }
 
-        private bool _mapFollowPlane = true;
+        private Color _planeColor = Settings.Default.PlaneColor;
+
+        public Color PlaneColor
+        {
+            get => _planeColor;
+            set
+            {
+                _planeColor = value;
+                
+                Settings.Default.PlaneColor = value;
+                Settings.Default.Save();
+            }
+        }
+        
+        private bool _mapFollowPlane = Settings.Default.FollowPlane;
         public bool MapFollowPlane
         {
             get => _mapFollowPlane;
@@ -45,10 +60,13 @@ namespace SimWinO.WPF.ViewModels
                 }
                 
                 _mapFollowPlane = value;
+
+                Settings.Default.FollowPlane = value;
+                Settings.Default.Save();
             }
         }
 
-        private bool _mapAutoZoom = true;
+        private bool _mapAutoZoom = Settings.Default.AutoZoom;
         public bool MapAutoZoom
         {
             get => _mapAutoZoom;
@@ -63,6 +81,9 @@ namespace SimWinO.WPF.ViewModels
                     BingMap.MouseWheel -= DisableMouseWheelEvent;
                 
                 _mapAutoZoom = value;
+                
+                Settings.Default.AutoZoom = value;
+                Settings.Default.Save();
             }
         }
         
@@ -105,7 +126,8 @@ namespace SimWinO.WPF.ViewModels
             
             // Bing Maps
             PlaneLocation = new Location(e.CurrentState.SimState.PlaneLatitude, e.CurrentState.SimState.PlaneLongitude);
-
+            PlaneOrientation = e.CurrentState.SimState.PlaneHeadingDegreesTrue * (180 / Math.PI);
+            
             if (MapAutoZoom)
                 ZoomLevel = Math.Max((300 - e.CurrentState.SimState.GroundVelocity) / 20 + 7, 7);
 
@@ -177,7 +199,7 @@ namespace SimWinO.WPF.ViewModels
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-                UpdateCheckError = false;
+                UpdateCheckError = true;
             }
         }
 

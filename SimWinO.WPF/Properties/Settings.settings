@@ -11,5 +11,14 @@
     <Setting Name="VersionFile" Type="System.String" Scope="Application">
       <Value Profile="(Default)">version.sha256</Value>
     </Setting>
+    <Setting Name="FollowPlane" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoZoom" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PlaneColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFFFFFFF</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

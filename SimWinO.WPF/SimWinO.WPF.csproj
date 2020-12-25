@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\plane.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ControlzEx" Version="4.4.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.3" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3" />
@@ -30,6 +34,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SimWinO.Core\SimWinO.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\plane.png" />
   </ItemGroup>
 
   <ItemGroup>

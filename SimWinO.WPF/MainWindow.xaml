@@ -134,25 +134,44 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding ZoomLevel}" Margin="10 5" />
-                        <TextBlock Text="{Binding PlaneLocation}" Margin="10 5" />
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="1"  Orientation="Horizontal">
                         <mah:ToggleSwitch IsOn="{Binding MapFollowPlane}" Margin="8 3">Suivi de l'avion</mah:ToggleSwitch>
                         <mah:ToggleSwitch IsOn="{Binding MapAutoZoom}" Margin="8 3">Zoom automatique</mah:ToggleSwitch>
+                        <StackPanel Orientation="Horizontal">
+                            <mah:ColorPicker Margin="8 5" DefaultColor="White" SelectedColor="{Binding PlaneColor}" />
+                            <TextBlock VerticalAlignment="Center" FontSize="14">Couleur de l'avion</TextBlock>
+                        </StackPanel>
                     </StackPanel>
 
                     <wpf:Map Mode="AerialWithLabels" 
-                             Grid.Row="2"
+                             Grid.Row="1"
                              ZoomLevel="{Binding ZoomLevel}"
                              Name="BingMap">
-                        <wpf:Pushpin Location="{Binding PlaneLocation}"/>
+                        <wpf:Map.Resources>
+                            <ControlTemplate x:Key="PushPinControlTemplate" TargetType="wpf:Pushpin">
+                                <Grid>
+                                    <Rectangle Width="32" Height="32">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding PlaneColor}" />
+                                        </Rectangle.Fill>
+                                        <Rectangle.OpacityMask>
+                                            <ImageBrush ImageSource= "Resources/plane.png">
+                                                <ImageBrush.Transform>
+                                                    <TransformGroup>
+                                                        <RotateTransform CenterX="16" CenterY="16" Angle="{Binding PlaneOrientation}" />
+                                                    </TransformGroup>
+                                                </ImageBrush.Transform>
+                                            </ImageBrush>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
+                                </Grid>
+                            </ControlTemplate>
+                        </wpf:Map.Resources>
+
+                        <wpf:Pushpin Template="{StaticResource PushPinControlTemplate}" Location="{Binding PlaneLocation}"/>
                     </wpf:Map>
                 </Grid>
             </TabItem>
@@ -184,7 +203,7 @@
             <TextBlock Text="Flight Simulator" Grid.Column="4" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" />
             <Border Grid.Column="5" Margin="5 1 1 1" Background="{Binding IsFlightSimulatorConnected, Converter={StaticResource BoolToConnectedConverter}, TargetNullValue=Red}" Width="25" />
 
-            <TextBlock Grid.Column="7" Text="Impossible de vérifier les mises à jour" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" Visibility="{Binding Path=UpdateCheckError, Converter={StaticResource TrueToVisibilityConverter}}" />
+            <TextBlock Grid.Column="7" Margin="5 0" Text="Impossible de vérifier les mises à jour" Foreground="{StaticResource MahApps.Brushes.IdealForeground}" Visibility="{Binding Path=UpdateCheckError, Converter={StaticResource TrueToVisibilityConverter}}" />
         </Grid>
     </Grid>
 </mah:MetroWindow>

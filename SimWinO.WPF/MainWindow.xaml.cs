@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using Microsoft.Maps.MapControl.WPF;
+using SimWinO.WPF.Properties;
 using SimWinO.WPF.ViewModels;
 
 namespace SimWinO.WPF
@@ -66,8 +67,11 @@ namespace SimWinO.WPF
         {
             ViewModel.CheckForUpdate();
 
-            BingMap.MouseMove += ViewModel.DisableMouseEvent;
-            BingMap.MouseWheel += ViewModel.DisableMouseWheelEvent;
+            if (Settings.Default.FollowPlane)
+                BingMap.MouseMove += ViewModel.DisableMouseEvent;
+            
+            if (Settings.Default.AutoZoom)
+                BingMap.MouseWheel += ViewModel.DisableMouseWheelEvent;
         }
 
         private void Tabs_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
