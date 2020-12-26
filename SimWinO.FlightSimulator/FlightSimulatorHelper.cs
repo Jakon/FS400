@@ -30,7 +30,7 @@ namespace SimWinO.FlightSimulator
         private void StartTimer()
         {
             tickCancellationToken = new CancellationTokenSource();
-            _ = PeriodicTask.Run(TimerTick, TimeSpan.FromMilliseconds(100), tickCancellationToken.Token);
+            _ = PeriodicTask.Run(TimerTick, TimeSpan.FromMilliseconds(20), tickCancellationToken.Token);
         }
 
         private void StopTimer()
