@@ -72,6 +72,8 @@ namespace SimWinO.WPF
             
             if (Settings.Default.AutoZoom)
                 BingMap.MouseWheel += ViewModel.DisableMouseWheelEvent;
+
+            BingMap.Mode = Settings.Default.MapSatelliteMode ? new AerialMode(true) : new RoadMode();
         }
 
         private void Tabs_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

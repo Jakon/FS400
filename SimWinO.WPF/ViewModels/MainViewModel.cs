@@ -32,7 +32,6 @@ namespace SimWinO.WPF.ViewModels
         public double PlaneOrientation { get; set; }
 
         private Color _planeColor = Settings.Default.PlaneColor;
-
         public Color PlaneColor
         {
             get => _planeColor;
@@ -44,7 +43,7 @@ namespace SimWinO.WPF.ViewModels
                 Settings.Default.Save();
             }
         }
-        
+
         private bool _mapFollowPlane = Settings.Default.FollowPlane;
         public bool MapFollowPlane
         {
@@ -83,6 +82,21 @@ namespace SimWinO.WPF.ViewModels
                 _mapAutoZoom = value;
                 
                 Settings.Default.AutoZoom = value;
+                Settings.Default.Save();
+            }
+        }
+
+        private bool _mapModeToggle = Settings.Default.MapSatelliteMode;
+        public bool MapModeToggle
+        {
+            get => _mapModeToggle;
+            set
+            {
+                _mapModeToggle = value;
+
+                BingMap.Mode = value ? new AerialMode(true) : new RoadMode();
+
+                Settings.Default.MapSatelliteMode = value;
                 Settings.Default.Save();
             }
         }

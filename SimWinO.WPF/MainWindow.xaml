@@ -140,13 +140,27 @@
                     <StackPanel Orientation="Horizontal">
                         <mah:ToggleSwitch IsOn="{Binding MapFollowPlane}" Margin="8 3">Suivi de l'avion</mah:ToggleSwitch>
                         <mah:ToggleSwitch IsOn="{Binding MapAutoZoom}" Margin="8 3">Zoom automatique</mah:ToggleSwitch>
+                        <mah:ToggleSwitch IsOn="{Binding MapModeToggle}" Width="135" Margin="8 3">
+                            <mah:ToggleSwitch.Style>
+                                <Style TargetType="mah:ToggleSwitch">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsOn" Value="True">
+                                            <Setter Property="Content" Value="Vue satellite" />
+                                        </Trigger>
+                                        <Trigger Property="IsOn" Value="False">
+                                            <Setter Property="Content" Value="Vue plan" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </mah:ToggleSwitch.Style>
+                        </mah:ToggleSwitch>
                         <StackPanel Orientation="Horizontal">
                             <mah:ColorPicker Margin="8 5" DefaultColor="White" SelectedColor="{Binding PlaneColor}" />
                             <TextBlock VerticalAlignment="Center" FontSize="14">Couleur de l'avion</TextBlock>
                         </StackPanel>
                     </StackPanel>
 
-                    <wpf:Map Mode="AerialWithLabels" 
+                    <wpf:Map Mode="AerialWithLabels"
                              Grid.Row="1"
                              ZoomLevel="{Binding ZoomLevel}"
                              Name="BingMap">
